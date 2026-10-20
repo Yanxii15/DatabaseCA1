@@ -31,9 +31,9 @@ CREATE TABLE Item (
 CREATE TABLE Stock (
     LocationID INT NOT NULL,
     ItemID     INT NOT NULL,
-    SupplierID INT NOT NULL,
     ItemAmount INT NULL,
-    PRIMARY KEY (LocationID, ItemID, SupplierID),
+    SellPrice   DECIMAL(3,2) NOT NULL,
+    PRIMARY KEY (LocationID, ItemID),
     FOREIGN KEY (LocationID) REFERENCES Location (LocationID),
     FOREIGN KEY (ItemID)     REFERENCES Item (ItemID)
 );
