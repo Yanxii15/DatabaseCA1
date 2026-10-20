@@ -119,5 +119,20 @@ CREATE TABLE OrderLine (
     FOREIGN KEY (ItemID)  REFERENCES Item (ItemID)
 );
 
+CREATE TABLE Supplier (
+    SupplierID   INT          NOT NULL,
+    SupplierName VARCHAR(100) NOT NULL,
+    PRIMARY KEY (SupplierID)
+);
+
+CREATE TABLE Supply (
+    SupplierID INT NOT NULL,
+    ItemID     INT NOT NULL,
+    BuyPrice   DECIMAL(3,2) NOT NULL,
+    PRIMARY KEY (SupplierID, ItemID),
+    FOREIGN KEY (SupplierID) REFERENCES Supplier (SupplierID),
+    FOREIGN KEY (ItemID)     REFERENCES Item (ItemID)
+);
+
 --- Inserts
 -- edit test for github
