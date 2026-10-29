@@ -31,8 +31,9 @@ CREATE TABLE Item (
 CREATE TABLE Stock (
     LocationID INT NOT NULL,
     ItemID     INT NOT NULL,
-    ItemAmount INT NULL,
-    SellPrice   DECIMAL(3,2) NOT NULL,
+    ItemAmount INT NULL CHECK (ItemAmount >= 0),
+    SellPrice  DECIMAL(6,2) NOT NULL CHECK (SellPrice > 0),
+    PRIMARY KEY (LocationID, ItemID),
     FOREIGN KEY (LocationID) REFERENCES Location (LocationID),
     FOREIGN KEY (ItemID)     REFERENCES Item (ItemID)
 );
@@ -55,6 +56,7 @@ CREATE TABLE Employee (
 CREATE TABLE EmployeeLocation (
     LocationID INT NOT NULL,
     EmployeeID INT NOT NULL,
+    PRIMARY KEY (LocationID, EmployeeID),
     FOREIGN KEY (LocationID) REFERENCES Location (LocationID),
     FOREIGN KEY (EmployeeID) REFERENCES Employee (EmployeeID)
 );
@@ -95,6 +97,7 @@ CREATE TABLE Prescription (
     RecordID         INT         NOT NULL,
     MedicationID     INT         NOT NULL,
     MedicationAmount VARCHAR(20) NOT NULL,
+    PRIMARY KEY (RecordID, MedicationID),
     FOREIGN KEY (RecordID)     REFERENCES VetRecord (RecordID),
     FOREIGN KEY (MedicationID) REFERENCES Medication (MedicationID)
 );
@@ -110,7 +113,8 @@ CREATE TABLE CustomerOrder (
 CREATE TABLE OrderLine (
     OrderID     INT NOT NULL,
     ItemID      INT NOT NULL,
-    OrderAmount INT NOT NULL,
+    OrderAmount INT NOT NULL CHECK (OrderAmount > 0),
+    PRIMARY KEY (OrderID, ItemID),
     FOREIGN KEY (OrderID) REFERENCES CustomerOrder (OrderID),
     FOREIGN KEY (ItemID)  REFERENCES Item (ItemID)
 );
@@ -124,7 +128,7 @@ CREATE TABLE Supplier (
 CREATE TABLE Supply (
     SupplierID INT NOT NULL,
     ItemID     INT NOT NULL,
-    BuyPrice   DECIMAL(3,2) NOT NULL,
+    BuyPrice   DECIMAL(6,2) NOT NULL CHECK (BuyPrice > 0),
     PRIMARY KEY (SupplierID, ItemID),
     FOREIGN KEY (SupplierID) REFERENCES Supplier (SupplierID),
     FOREIGN KEY (ItemID)     REFERENCES Item (ItemID)
@@ -151,8 +155,7 @@ insert into Item values(5, "Food Bowl");
 insert into Item values(6, "Ball");
 
 -- Insert into Stock table
-insert into Stock values(1,1,1,12);
-insert into Stock values(1,1,60,15);
+insert into Stock values(1,1,61,12);
 insert into Stock values(1,2,451,12);
 insert into Stock values(1,3,12,6);
 insert into Stock values(1,4,90,30);
@@ -166,6 +169,27 @@ insert into Stock values(2,6,null,20);
 insert into Job values(1,"Cashier");
 insert into Job values(2, "Janitor");
 insert into Job values(3, "Stocker");
+
+-- Insert into Employee table
+insert into Employee values(1, "Joe Employeeson", 1);
+insert into Employee values(2, "Jaiden Employeedaughter", 1);
+insert into Employee values(3, "Jaden Employeechild", 2);
+insert into Employee values(4, "Jack MacEmployee", 3);
+insert into Employee values(5, "Jo O'Employee", 3);
+insert into Employee values(6, "Julia NiEmployee", 1);
+insert into Employee values(7, "Joe MhicEmployee", 2);
+insert into Employee values(8, "Jackelyn UíEmployee", 1);
+
+-- Insert into EmployeeLocation, employee 2 works at both
+insert into EmployeeLocation values(1, 1);
+insert into EmployeeLocation values(1, 2);
+insert into EmployeeLocation values(1, 3);
+insert into EmployeeLocation values(1, 4);
+insert into EmployeeLocation values(1, 6);
+insert into EmployeeLocation values(2, 2);
+insert into EmployeeLocation values(2, 5);
+insert into EmployeeLocation values(2, 7);
+insert into EmployeeLocation values(2, 8);
 
 -- Insert into Customer table
 insert into Customer values(1,"Stacey Stacey");
@@ -215,9 +239,9 @@ insert into Prescription values(3, 6, "20g");
 insert into Prescription values(4, 3, "30g");
 insert into Prescription values(5, 2, "1g");
 insert into Prescription values(6, 4, "30kl");
-insert into Prescription values(1, 3, "20kg");
+insert into Prescription values(7, 3, "20kg");
 insert into Prescription values(6, 1, "20g");
-insert into Prescription values(7, 5, "40moles");
+insert into Prescription values(8, 5, "40moles");
 
 -- Insert into CustomerOrder
 insert into CustomerOrder values(1, 1);
@@ -239,8 +263,8 @@ insert into OrderLine values(5, 4, 65);
 insert into OrderLine values(6, 5, 31);
 insert into OrderLine values(7, 6, 12);
 insert into OrderLine values(8, 2, 781);
-insert into OrderLine values(1, 1, 54);
-insert into OrderLine values(3, 3, 12);
+insert into OrderLine values(9, 1, 54);
+insert into OrderLine values(9, 3, 12);
 
 -- Insert into Supplier
 insert into Supplier values(1, "WordStop");
@@ -261,3 +285,207 @@ insert into Supply values(4, 3, 4);
 insert into Supply values(2, 4, 14);
 insert into Supply values(6, 5, 3);
 insert into Supply values(6, 6, 14);
+-- Read, queries joining multiple tables
+
+-- each customer's pets and which branch they're registered at
+SELECT c.CustomerName, p.PetName, p.PetSpecies, l.LocationAddress
+FROM Customer c
+JOIN Pet p      ON p.CustomerID = c.CustomerID
+JOIN Location l ON l.LocationID = p.LocationID
+ORDER BY c.CustomerName;
+
+-- full vet history, which pet got what
+SELECT p.PetName, v.RecordID, m.MedicationName, pr.MedicationAmount
+FROM Pet p
+JOIN VetRecord v     ON v.PetID = p.PetID
+JOIN Prescription pr ON pr.RecordID = v.RecordID
+JOIN Medication m    ON m.MedicationID = pr.MedicationID
+ORDER BY p.PetName, v.RecordID;
+
+-- what's on each order
+SELECT o.OrderID, c.CustomerName, i.ItemName, ol.OrderAmount
+FROM CustomerOrder o
+JOIN Customer c   ON c.CustomerID = o.CustomerID
+JOIN OrderLine ol ON ol.OrderID = o.OrderID
+JOIN Item i       ON i.ItemID = ol.ItemID
+ORDER BY o.OrderID;
+
+-- Indexes
+-- staff look pets up by species and customers by name, neither is a key
+EXPLAIN SELECT * FROM Pet WHERE PetSpecies = "Horse";
+CREATE INDEX idx_pet_species ON Pet (PetSpecies);
+EXPLAIN SELECT * FROM Pet WHERE PetSpecies = "Horse";
+
+EXPLAIN SELECT * FROM Customer WHERE CustomerName = "Stacey Stacey";
+CREATE INDEX idx_customer_name ON Customer (CustomerName);
+EXPLAIN SELECT * FROM Customer WHERE CustomerName = "Stacey Stacey";
+
+-- Views
+
+-- security view, counter staff see pets for sale but not owners or vet info
+CREATE VIEW PetsForSale AS
+SELECT p.PetID, p.PetName, p.PetSpecies, l.LocationAddress
+FROM Pet p
+JOIN Location l ON l.LocationID = p.LocationID
+WHERE p.PetInStore = TRUE AND p.CustomerID IS NULL;
+
+-- security view, staff list without IDs
+CREATE VIEW StaffDirectory AS
+SELECT e.EmployeeName, j.JobName, l.LocationAddress
+FROM Employee e
+JOIN Job j              ON j.JobID = e.JobID
+JOIN EmployeeLocation el ON el.EmployeeID = e.EmployeeID
+JOIN Location l         ON l.LocationID = el.LocationID;
+
+-- summary for managers, stock and its value per branch
+CREATE VIEW StockValueByLocation AS
+SELECT l.LocationAddress,
+       COUNT(s.ItemID)                 AS ItemsStocked,
+       SUM(s.ItemAmount)               AS TotalUnits,
+       SUM(s.ItemAmount * s.SellPrice) AS StockValue
+FROM Location l
+JOIN Stock s ON s.LocationID = l.LocationID
+GROUP BY l.LocationAddress;
+
+-- summary for managers, vet work done per branch
+CREATE VIEW VetSummaryByLocation AS
+SELECT l.LocationAddress,
+       COUNT(DISTINCT p.PetID)    AS PetsTreated,
+       COUNT(DISTINCT v.RecordID) AS VetRecords,
+       COUNT(pr.MedicationID)     AS Prescriptions
+FROM Location l
+JOIN Pet p           ON p.LocationID = l.LocationID
+JOIN VetRecord v     ON v.PetID = p.PetID
+JOIN Prescription pr ON pr.RecordID = v.RecordID
+GROUP BY l.LocationAddress;
+
+SELECT * FROM PetsForSale;
+SELECT * FROM StaffDirectory;
+SELECT * FROM StockValueByLocation;
+SELECT * FROM VetSummaryByLocation;
+
+-- Triggers
+
+CREATE TABLE StockAudit (
+    AuditID    INT NOT NULL AUTO_INCREMENT,
+    LocationID INT NOT NULL,
+    ItemID     INT NOT NULL,
+    OldAmount  INT NULL,
+    NewAmount  INT NULL,
+    ChangedBy  VARCHAR(100) NOT NULL,
+    ChangedAt  DATETIME NOT NULL,
+    PRIMARY KEY (AuditID)
+);
+
+DELIMITER //
+
+-- auditing, logs every change to a stock amount
+CREATE TRIGGER StockAmountAudit
+AFTER UPDATE ON Stock
+FOR EACH ROW
+BEGIN
+    IF NOT (OLD.ItemAmount <=> NEW.ItemAmount) THEN
+        INSERT INTO StockAudit
+            (LocationID, ItemID, OldAmount, NewAmount, ChangedBy, ChangedAt)
+        VALUES
+            (NEW.LocationID, NEW.ItemID, OLD.ItemAmount, NEW.ItemAmount,
+             CURRENT_USER(), NOW());
+    END IF;
+END //
+
+-- constraint, can't order more of an item than all branches have together
+CREATE TRIGGER OrderLineStockCheck
+BEFORE INSERT ON OrderLine
+FOR EACH ROW
+BEGIN
+    IF NEW.OrderAmount > (SELECT IFNULL(SUM(ItemAmount), 0)
+                          FROM Stock WHERE ItemID = NEW.ItemID) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Not enough stock for this order';
+    END IF;
+END //
+
+-- Stored procedures
+
+-- adds stock to a branch, the audit trigger logs it
+CREATE PROCEDURE RestockItem(IN pLocationID INT, IN pItemID INT, IN pAmount INT)
+BEGIN
+    UPDATE Stock
+    SET ItemAmount = IFNULL(ItemAmount, 0) + pAmount
+    WHERE LocationID = pLocationID AND ItemID = pItemID;
+END //
+
+-- a pet's full vet history
+CREATE PROCEDURE GetPetHistory(IN pPetID INT)
+BEGIN
+    SELECT p.PetName, v.RecordID, m.MedicationName, pr.MedicationAmount
+    FROM Pet p
+    JOIN VetRecord v     ON v.PetID = p.PetID
+    JOIN Prescription pr ON pr.RecordID = v.RecordID
+    JOIN Medication m    ON m.MedicationID = pr.MedicationID
+    WHERE p.PetID = pPetID;
+END //
+
+DELIMITER ;
+
+CALL RestockItem(2, 6, 25);
+CALL GetPetHistory(12);
+SELECT * FROM StockAudit;
+
+-- trigger test, this one gets rejected since there's only 30 food bowls
+-- insert into OrderLine values(9, 5, 500);
+
+-- Update
+
+-- Bertie got sold to Bob Sponge
+UPDATE Pet SET PetInStore = FALSE, CustomerID = 5 WHERE PetID = 8;
+
+-- price change on crickets at branch 2
+UPDATE Stock SET SellPrice = 25.00 WHERE LocationID = 2 AND ItemID = 4;
+
+-- sold 10 bags of dog food at branch 1, shows up in StockAudit
+UPDATE Stock SET ItemAmount = ItemAmount - 10 WHERE LocationID = 1 AND ItemID = 1;
+SELECT * FROM StockAudit;
+
+-- Delete
+
+-- eyedrops taken off Goku's record
+DELETE FROM Prescription WHERE RecordID = 6 AND MedicationID = 4;
+
+-- order 7 cancelled, lines go first because of the FK
+DELETE FROM OrderLine WHERE OrderID = 7;
+DELETE FROM CustomerOrder WHERE OrderID = 7;
+
+-- Transactions
+
+-- both inserts kept
+START TRANSACTION;
+INSERT INTO CustomerOrder VALUES (10, 3);
+INSERT INTO OrderLine VALUES (10, 4, 5);
+COMMIT;
+
+-- both inserts undone
+START TRANSACTION;
+INSERT INTO CustomerOrder VALUES (11, 6);
+INSERT INTO OrderLine VALUES (11, 5, 2);
+ROLLBACK;
+
+-- 10 is there, 11 isn't
+SELECT * FROM CustomerOrder WHERE OrderID IN (10, 11);
+
+-- Database administration
+
+DROP USER IF EXISTS 'cashier'@'localhost';
+DROP USER IF EXISTS 'vet'@'localhost';
+CREATE USER 'cashier'@'localhost' IDENTIFIED BY 'Cashier123!';
+CREATE USER 'vet'@'localhost' IDENTIFIED BY 'Vet123!';
+
+GRANT SELECT ON petshop.PetsForSale TO 'cashier'@'localhost';
+GRANT SELECT, UPDATE ON petshop.Stock TO 'cashier'@'localhost';
+GRANT SELECT, INSERT ON petshop.VetRecord TO 'vet'@'localhost';
+GRANT SELECT, INSERT ON petshop.Prescription TO 'vet'@'localhost';
+GRANT EXECUTE ON PROCEDURE petshop.GetPetHistory TO 'vet'@'localhost';
+SHOW GRANTS FOR 'cashier'@'localhost';
+
+-- cashier shouldn't change stock directly anymore
+REVOKE UPDATE ON petshop.Stock FROM 'cashier'@'localhost';
+SHOW GRANTS FOR 'cashier'@'localhost';
