@@ -320,6 +320,11 @@ EXPLAIN SELECT * FROM Customer WHERE CustomerName = "Stacey Stacey";
 CREATE INDEX idx_customer_name ON Customer (CustomerName);
 EXPLAIN SELECT * FROM Customer WHERE CustomerName = "Stacey Stacey";
 
+--Look up items by their name
+EXPLAIN SELECT * FROM Item WHERE ItemName = "Cat Food";
+CREATE INDEX idx_item_name ON Item (ItemName);
+EXPLAIN SELECT * FROM Item WHERE ItemName = "Cat Food";
+
 -- Views
 
 -- security view, counter staff see pets for sale but not owners or vet info
@@ -359,10 +364,28 @@ JOIN VetRecord v     ON v.PetID = p.PetID
 JOIN Prescription pr ON pr.RecordID = v.RecordID
 GROUP BY l.LocationAddress;
 
+-- Creating a view of each supplier and what items they supply
+CREATE VIEW SuppliersAndItems AS
+SELECT s.SupplierName, i.ItemName
+FROM Supplier s
+JOIN Supply ON s.SupplierID = Supply.SupplierID
+JOIN Item i ON Supply.ItemID = i.ItemID
+
+-- Creating a view of each customer, the item they have ordered, and how much of each item they ordered
+CREATE VIEW CustomerAndOrderedItems AS
+SELECT c.CustomerName, i.ItemName, o.OrderAmount
+FROM Customer c
+JOIN CustomerOrder ON c.CustomerID = CustomerOrder.CustomerID
+JOIN OrderLine o ON CustomerOrder.OrderID = o.OrderID
+JOIN Item I ON o.ItemID = i.ItemID
+
+
 SELECT * FROM PetsForSale;
 SELECT * FROM StaffDirectory;
 SELECT * FROM StockValueByLocation;
 SELECT * FROM VetSummaryByLocation;
+SELECT * FROM SuppliersAndItems;
+SELECT * FROM CustomerAndOrderedItems;
 
 -- Triggers
 
@@ -425,10 +448,23 @@ BEGIN
     WHERE p.PetID = pPetID;
 END //
 
+-- Get the suppliers that are supplying to a location and what item they are supplying
+CREATE PROCEDURE GetLocationSuppliers(IN pLocationID INT)
+BEGIN
+    SELECT l.LocationID, l.LocationAddress, i.ItemName, s.SupplierName
+    FROM Location l
+    JOIN Stock st ON l.LocationID = st.LocationID
+    JOIN Item i ON st.ItemID = i.ItemID
+    JOIN Supply su ON i.ItemID = su.ItemID
+    JOIN Supplier s ON su.SupplierID = s.SupplierID
+    WHERE l.LocationID = pLocationID;
+END //
+
 DELIMITER ;
 
 CALL RestockItem(2, 6, 25);
 CALL GetPetHistory(12);
+Call GetLocationSuppliers(1);
 SELECT * FROM StockAudit;
 
 -- trigger test, this one gets rejected since there's only 30 food bowls
