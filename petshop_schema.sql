@@ -320,10 +320,15 @@ EXPLAIN SELECT * FROM Customer WHERE CustomerName = "Stacey Stacey";
 CREATE INDEX idx_customer_name ON Customer (CustomerName);
 EXPLAIN SELECT * FROM Customer WHERE CustomerName = "Stacey Stacey";
 
---Look up items by their name
+-- Look up items by their name
 EXPLAIN SELECT * FROM Item WHERE ItemName = "Cat Food";
 CREATE INDEX idx_item_name ON Item (ItemName);
 EXPLAIN SELECT * FROM Item WHERE ItemName = "Cat Food";
+
+-- look up medication by name
+EXPLAIN SELECT * FROM Medication WHERE MedicationName = "Ivermectin";
+CREATE INDEX idx_medi_name ON Medication (MedicationName);
+EXPLAIN SELECT * FROM Medication WHERE MedicationName = "Ivermectin";
 
 -- Views
 
