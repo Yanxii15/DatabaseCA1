@@ -374,7 +374,7 @@ CREATE VIEW SuppliersAndItems AS
 SELECT s.SupplierName, i.ItemName
 FROM Supplier s
 JOIN Supply ON s.SupplierID = Supply.SupplierID
-JOIN Item i ON Supply.ItemID = i.ItemID
+JOIN Item i ON Supply.ItemID = i.ItemID;
 
 -- Creating a view of each customer, the item they have ordered, and how much of each item they ordered
 CREATE VIEW CustomerAndOrderedItems AS
@@ -382,7 +382,7 @@ SELECT c.CustomerName, i.ItemName, o.OrderAmount
 FROM Customer c
 JOIN CustomerOrder ON c.CustomerID = CustomerOrder.CustomerID
 JOIN OrderLine o ON CustomerOrder.OrderID = o.OrderID
-JOIN Item I ON o.ItemID = i.ItemID
+JOIN Item I ON o.ItemID = i.ItemID;
 
 
 SELECT * FROM PetsForSale;
@@ -447,9 +447,9 @@ CREATE PROCEDURE GetPetHistory(IN pPetID INT)
 BEGIN
     SELECT p.PetName, v.RecordID, m.MedicationName, pr.MedicationAmount
     FROM Pet p
-    JOIN VetRecord v     ON v.PetID = p.PetID
+    JOIN VetRecord v ON v.PetID = p.PetID
     JOIN Prescription pr ON pr.RecordID = v.RecordID
-    JOIN Medication m    ON m.MedicationID = pr.MedicationID
+    JOIN Medication m ON m.MedicationID = pr.MedicationID
     WHERE p.PetID = pPetID;
 END //
 
@@ -467,10 +467,11 @@ END //
 
 DELIMITER ;
 
-CALL RestockItem(2, 6, 25);
-CALL GetPetHistory(12);
-Call GetLocationSuppliers(1);
-SELECT * FROM StockAudit;
+-- THESE WILL EXPLODE IF RAN WITIN THE SAME FILE THAT THE PROCEDURES ARE CREATED... exception RestockItem.
+-- CALL RestockItem(2, 6, 25);
+-- CALL GetPetHistory(12);
+-- Call GetLocationSuppliers(1);
+-- SELECT * FROM StockAudit;
 
 -- trigger test, this one gets rejected since there's only 30 food bowls
 -- insert into OrderLine values(9, 5, 500);
