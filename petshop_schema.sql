@@ -476,6 +476,45 @@ END //
 
 DELIMITER ;
 
+
+--Create users
+CREATE USER 'John ManagerSon'@'localhost'
+IDENTIFIED BY 'Manager1';
+
+--Create roles
+CREATE ROLE manager;
+GRANT SELECT, INSERT, UPDATE
+ON employee
+TO manager;
+
+GRANT SELECT, INSERT, UPDATE 
+ON stock
+TO manager;
+
+GRANT SELECT, INSERT, UPDATE
+ON pet
+TO manager;
+
+GRANT SELECT, INSERT, UPDATE
+ON supply
+TO manager;
+
+GRANT manager TO 'John ManagerSon'@'localhost';
+
+-- Allow the roles to see views
+GRANT SELECT
+ON petshop.suppliersanditems
+TO manager;
+
+GRANT SELECT
+ON petshop.stockvaluebylocation
+TO manager;
+
+GRANT SELECT
+ON petshop.petsforsale
+TO manager;
+
+
 -- THESE WILL EXPLODE IF RAN WITIN THE SAME FILE THAT THE PROCEDURES ARE CREATED... exception RestockItem.
 -- CALL RestockItem(2, 6, 25);
 -- CALL GetPetHistory(12);
