@@ -432,6 +432,15 @@ BEGIN
     END IF;
 END //
 
+CREATE TRIGGER NoLongerStockingItem
+BEFORE DELETE ON Item
+FOR EACH ROW
+BEGIN
+	DELETE FROM Stock WHERE Old.ItemID = Stock.ItemID;
+	DELETE FROM Orderline WHERE Old.ItemID = orderline.ItemID;
+	DELETE FROM Supply WHERE Old.ItemID = supply.ItemID;
+END//
+
 -- Stored procedures
 
 -- adds stock to a branch, the audit trigger logs it
