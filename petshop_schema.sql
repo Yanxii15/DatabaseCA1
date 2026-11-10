@@ -465,12 +465,32 @@ BEGIN
     WHERE l.LocationID = pLocationID;
 END //
 
+-- get the employees who work at a location
+CREATE PROCEDURE GetEmployeeLocation(IN pLocationID INT)
+BEGIN
+    SELECT l.LocationID, e.EmployeeName
+	FROM Location l
+	JOIN EmployeeLocation el ON l.LocationID = el.LocationID
+	JOIN Employee e ON el.EmployeeID = e.EmployeeID
+    WHERE l.LocationID = pLocationID;
+END //
+-- get a certain customers pets
+CREATE PROCEDURE GetPetsOfCustomer(IN pCustomerID INT)
+BEGIN
+    SELECT p.PetName, c.CustomerName
+	FROM Pet p
+	JOIN Customer c ON p.CustomerID = c.CustomerID
+    WHERE p.CustomerID = pCustomerID;
+END //
+
 DELIMITER ;
 
 -- THESE WILL EXPLODE IF RAN WITIN THE SAME FILE THAT THE PROCEDURES ARE CREATED... exception RestockItem.
 -- CALL RestockItem(2, 6, 25);
 -- CALL GetPetHistory(12);
 -- Call GetLocationSuppliers(1);
+-- Call GetEmployeeLocation(2);
+-- CALL GetPetsOfCustomer(4);
 -- SELECT * FROM StockAudit;
 
 -- trigger test, this one gets rejected since there's only 30 food bowls
