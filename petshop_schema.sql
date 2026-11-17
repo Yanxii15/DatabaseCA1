@@ -495,11 +495,11 @@ END //
 DELIMITER ;
 
 
---Create users
+-- Create users
 CREATE USER 'John ManagerSon'@'localhost'
 IDENTIFIED BY 'Manager1';
 
---Create roles
+-- Create roles
 CREATE ROLE manager;
 GRANT SELECT, INSERT, UPDATE
 ON employee
