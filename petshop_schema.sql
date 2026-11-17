@@ -495,44 +495,6 @@ END //
 DELIMITER ;
 
 
--- Create users
-CREATE USER 'John ManagerSon'@'localhost'
-IDENTIFIED BY 'Manager1';
-
--- Create roles
-CREATE ROLE manager;
-GRANT SELECT, INSERT, UPDATE
-ON employee
-TO manager;
-
-GRANT SELECT, INSERT, UPDATE 
-ON stock
-TO manager;
-
-GRANT SELECT, INSERT, UPDATE
-ON pet
-TO manager;
-
-GRANT SELECT, INSERT, UPDATE
-ON supply
-TO manager;
-
-GRANT manager TO 'John ManagerSon'@'localhost';
-
--- Allow the roles to see views
-GRANT SELECT
-ON petshop.suppliersanditems
-TO manager;
-
-GRANT SELECT
-ON petshop.stockvaluebylocation
-TO manager;
-
-GRANT SELECT
-ON petshop.petsforsale
-TO manager;
-
-
 -- THESE WILL EXPLODE IF RAN WITIN THE SAME FILE THAT THE PROCEDURES ARE CREATED... exception RestockItem.
 -- CALL RestockItem(2, 6, 25);
 -- CALL GetPetHistory(12);
@@ -588,6 +550,7 @@ DROP USER IF EXISTS 'cashier'@'localhost';
 DROP USER IF EXISTS 'vet'@'localhost';
 CREATE USER 'cashier'@'localhost' IDENTIFIED BY 'Cashier123!';
 CREATE USER 'vet'@'localhost' IDENTIFIED BY 'Vet123!';
+CREATE USER 'John ManagerSon'@'localhost' IDENTIFIED BY 'Manager1';
 
 GRANT SELECT ON petshop.PetsForSale TO 'cashier'@'localhost';
 GRANT SELECT, UPDATE ON petshop.Stock TO 'cashier'@'localhost';
@@ -596,6 +559,38 @@ GRANT SELECT, INSERT ON petshop.Prescription TO 'vet'@'localhost';
 GRANT EXECUTE ON PROCEDURE petshop.GetPetHistory TO 'vet'@'localhost';
 SHOW GRANTS FOR 'cashier'@'localhost';
 
+CREATE ROLE manager;
+GRANT SELECT, INSERT, UPDATE
+ON employee
+TO manager;
+
+GRANT SELECT, INSERT, UPDATE 
+ON stock
+TO manager;
+
+GRANT SELECT, INSERT, UPDATE
+ON pet
+TO manager;
+
+GRANT SELECT, INSERT, UPDATE
+ON supply
+TO manager;
+
+GRANT manager TO 'John ManagerSon'@'localhost';
+
 -- cashier shouldn't change stock directly anymore
 REVOKE UPDATE ON petshop.Stock FROM 'cashier'@'localhost';
 SHOW GRANTS FOR 'cashier'@'localhost';
+
+-- Allow the roles to see views
+GRANT SELECT
+ON petshop.suppliersanditems
+TO manager;
+
+GRANT SELECT
+ON petshop.stockvaluebylocation
+TO manager;
+
+GRANT SELECT
+ON petshop.petsforsale
+TO manager;
