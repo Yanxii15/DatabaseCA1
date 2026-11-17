@@ -548,6 +548,7 @@ SELECT * FROM CustomerOrder WHERE OrderID IN (10, 11);
 
 DROP USER IF EXISTS 'cashier'@'localhost';
 DROP USER IF EXISTS 'vet'@'localhost';
+DROP USER IF EXISTS 'John ManagerSon'@'localhost';
 CREATE USER 'cashier'@'localhost' IDENTIFIED BY 'Cashier123!';
 CREATE USER 'vet'@'localhost' IDENTIFIED BY 'Vet123!';
 CREATE USER 'John ManagerSon'@'localhost' IDENTIFIED BY 'Manager1';
@@ -559,6 +560,7 @@ GRANT SELECT, INSERT ON petshop.Prescription TO 'vet'@'localhost';
 GRANT EXECUTE ON PROCEDURE petshop.GetPetHistory TO 'vet'@'localhost';
 SHOW GRANTS FOR 'cashier'@'localhost';
 
+DROP ROLE IF EXISTS manager;
 CREATE ROLE manager;
 GRANT SELECT, INSERT, UPDATE
 ON employee
