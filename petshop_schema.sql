@@ -541,6 +541,19 @@ INSERT INTO CustomerOrder VALUES (11, 6);
 INSERT INTO OrderLine VALUES (11, 5, 2);
 ROLLBACK;
 
+-- if the transaction has an error it will rollback, otherwise will commit
+START TRANSACTION;
+INSERT INTO Item VALUES (7, "Ball of Yarn");
+INSERT INTO Supply VALUES (3, 7, 13.50);
+IF @@ERROR = 0
+BEGIN
+COMMIT;
+END
+ELSE
+BEGIN
+ROLLBACK;
+END
+
 -- 10 is there, 11 isn't
 SELECT * FROM CustomerOrder WHERE OrderID IN (10, 11);
 
