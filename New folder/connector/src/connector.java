@@ -1,10 +1,4 @@
-import java.io.InputStream;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.URL;
 import java.sql.*;
-import java.util.Calendar;
-import java.util.Map;
 
 public class connector {
     // XAMPP default settings: root user with no password
@@ -32,6 +26,7 @@ public class connector {
     public static void main(String[] args) {
         getConnection();
         function1();
+        function2();
         }
 
     private static void function1() {
@@ -57,13 +52,13 @@ public class connector {
     }
     private static void function2() {
         try {
-            String query2 = "insert into Job (JobID, Job Name) values(?, ?);";
+            String query2 = "insert into Job values(4, Marketing);";
             Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
             Statement statement = conn.createStatement();
-            statement.setString(1, 4);
-            statement.setString(2, "Marketing");
             ResultSet rs = statement.executeQuery(query2);
-            System.out.println("Inserted")
+            int JobID = rs.getInt("JobID");
+            String JobName = rs.getString("JobName");
+            System.out.println("Inserted JobID" + JobID + " Job Name" + JobName);
             
         } catch (SQLException e) {
             System.out.println("⠀⠀⠀⠀⡏⠀⢀⣾⣏⠀⠀⠀⠀⠀⠈⣹⣷⣶⣯⠁⠀⠀⠀⠀⠀⣶⣶⣕⠈⠹⣎⢳⡾⠇⠀⠀⠀\n" + "⠀⠀⠀⠀⠃⠘⢸⣿⣟⢀⣴⣶⣾⣿⣾⣿⣿⣿⣿⣿⣿⣿⣶⣦⡲⣿⣿⣿⡇⠀⢻⣦⣀⠇⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⠀⣼⣿⣼⣷⡹⠟⠛⠻⣿⣿⣿⣿⣿⣿⠟⠉⠻⣿⣷⡽⣿⣿⣿⠀⠀⠉⠛⠃⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⡇⡴⠶⣦⠘⣿⣿⣷⡿⠇⣶⠟⣶⡈⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢀⢿⣿⣿⣿⣿⡆⠳⣤⡿⠀⣯⠿⢿⡷⠀⠙⠦⠾⠁⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢨⣼⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣾⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⡿⣵⣿⡿⠟⢛⣩⣀⡀⠓⠀⠀⠀⢠⣤⠀⠴⠄⢀⣬⣛⠿⣿⣿⣿⣿⠧⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⣿⣿⡿⣡⣶⣿⣿⣿⣿⣷⣤⣀⠀⢀⣀⣀⣀⣾⣿⣿⣷⣷⡌⢻⣿⣏⢧⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⣿⡿⣰⣏⣹⣋⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣻⣿⡙⣟⣹⡜⣿⣏⣯⠆⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⣿⢥⣿⡿⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⣿⣿⣹⣿⡎⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢿⡸⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⠿⠁⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⠃⢿⣿⣿⣯⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⡟⠠⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢠⡌⠻⠿⢺⣿⣯⣛⢿⣿⡿⣿⣯⡿⣿⣿⣟⣿⣿⣟⣟⡰⣰⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⡀⠈⠂⠀⠀⠀⠉⠉⠙⠛⠛⠙⠛⠛⠉⠉⠈⠉⠉⠉⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⠂⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⡼⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠀⠀⠀⢸⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⢣⢇⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⠅⠀⠀⣸⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢰⡷⠸⢹⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠂⠀⠀⣿⢸⡄⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣸⠃⡁⢸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀!");
@@ -71,7 +66,6 @@ public class connector {
         }
 
     }
-
     ;
 
     }
