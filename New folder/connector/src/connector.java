@@ -27,6 +27,8 @@ public class connector {
         getConnection();
         function1();
         function2();
+        function3();
+        function4();
         }
 
     private static void function1() {
@@ -52,13 +54,43 @@ public class connector {
     }
     private static void function2() {
         try {
-            String query2 = "insert into Job values(4, Marketing);";
+            String query2 = "insert into Job values(4, Marketing)";
             Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(query2);
             int JobID = rs.getInt("JobID");
             String JobName = rs.getString("JobName");
-            System.out.println("Inserted JobID" + JobID + " Job Name" + JobName);
+            System.out.println("Inserted => JobID" + JobID + " Job Name" + JobName);
+            
+        } catch (SQLException e) {
+            System.out.println("⠀⠀⠀⠀⡏⠀⢀⣾⣏⠀⠀⠀⠀⠀⠈⣹⣷⣶⣯⠁⠀⠀⠀⠀⠀⣶⣶⣕⠈⠹⣎⢳⡾⠇⠀⠀⠀\n" + "⠀⠀⠀⠀⠃⠘⢸⣿⣟⢀⣴⣶⣾⣿⣾⣿⣿⣿⣿⣿⣿⣿⣶⣦⡲⣿⣿⣿⡇⠀⢻⣦⣀⠇⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⠀⣼⣿⣼⣷⡹⠟⠛⠻⣿⣿⣿⣿⣿⣿⠟⠉⠻⣿⣷⡽⣿⣿⣿⠀⠀⠉⠛⠃⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⡇⡴⠶⣦⠘⣿⣿⣷⡿⠇⣶⠟⣶⡈⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢀⢿⣿⣿⣿⣿⡆⠳⣤⡿⠀⣯⠿⢿⡷⠀⠙⠦⠾⠁⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢨⣼⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣾⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⡿⣵⣿⡿⠟⢛⣩⣀⡀⠓⠀⠀⠀⢠⣤⠀⠴⠄⢀⣬⣛⠿⣿⣿⣿⣿⠧⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⣿⣿⡿⣡⣶⣿⣿⣿⣿⣷⣤⣀⠀⢀⣀⣀⣀⣾⣿⣿⣷⣷⡌⢻⣿⣏⢧⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⣿⡿⣰⣏⣹⣋⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣻⣿⡙⣟⣹⡜⣿⣏⣯⠆⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⣿⢥⣿⡿⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⣿⣿⣹⣿⡎⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢿⡸⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⠿⠁⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⠃⢿⣿⣿⣯⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⡟⠠⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢠⡌⠻⠿⢺⣿⣯⣛⢿⣿⡿⣿⣯⡿⣿⣿⣟⣿⣿⣟⣟⡰⣰⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⡀⠈⠂⠀⠀⠀⠉⠉⠙⠛⠛⠙⠛⠛⠉⠉⠈⠉⠉⠉⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⠂⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⡼⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠀⠀⠀⢸⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⢣⢇⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⠅⠀⠀⣸⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢰⡷⠸⢹⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠂⠀⠀⣿⢸⡄⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣸⠃⡁⢸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀!");
+            e.printStackTrace();
+        }
+
+    }
+    private static void function3() {
+        try {
+            String query3 = "UPDATE Job SET JobName = Vet WHERE JobID = 4";
+            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query3);
+            int JobID = rs.getInt("JobID");
+            String JobName = rs.getString("JobName");
+            System.out.println("Updated => JobID" + JobID + " Job Name" + JobName);
+            
+        } catch (SQLException e) {
+            System.out.println("⠀⠀⠀⠀⡏⠀⢀⣾⣏⠀⠀⠀⠀⠀⠈⣹⣷⣶⣯⠁⠀⠀⠀⠀⠀⣶⣶⣕⠈⠹⣎⢳⡾⠇⠀⠀⠀\n" + "⠀⠀⠀⠀⠃⠘⢸⣿⣟⢀⣴⣶⣾⣿⣾⣿⣿⣿⣿⣿⣿⣿⣶⣦⡲⣿⣿⣿⡇⠀⢻⣦⣀⠇⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⠀⣼⣿⣼⣷⡹⠟⠛⠻⣿⣿⣿⣿⣿⣿⠟⠉⠻⣿⣷⡽⣿⣿⣿⠀⠀⠉⠛⠃⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⡇⡴⠶⣦⠘⣿⣿⣷⡿⠇⣶⠟⣶⡈⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢀⢿⣿⣿⣿⣿⡆⠳⣤⡿⠀⣯⠿⢿⡷⠀⠙⠦⠾⠁⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢨⣼⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣾⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⡿⣵⣿⡿⠟⢛⣩⣀⡀⠓⠀⠀⠀⢠⣤⠀⠴⠄⢀⣬⣛⠿⣿⣿⣿⣿⠧⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⣿⣿⡿⣡⣶⣿⣿⣿⣿⣷⣤⣀⠀⢀⣀⣀⣀⣾⣿⣿⣷⣷⡌⢻⣿⣏⢧⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⣿⡿⣰⣏⣹⣋⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣻⣿⡙⣟⣹⡜⣿⣏⣯⠆⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⣿⢥⣿⡿⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⣿⣿⣹⣿⡎⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢿⡸⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⠿⠁⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⠃⢿⣿⣿⣯⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⡟⠠⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢠⡌⠻⠿⢺⣿⣯⣛⢿⣿⡿⣿⣯⡿⣿⣿⣟⣿⣿⣟⣟⡰⣰⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⡀⠈⠂⠀⠀⠀⠉⠉⠙⠛⠛⠙⠛⠛⠉⠉⠈⠉⠉⠉⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⠂⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⡼⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠀⠀⠀⢸⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⢣⢇⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⠅⠀⠀⣸⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢰⡷⠸⢹⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠂⠀⠀⣿⢸⡄⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣸⠃⡁⢸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀!");
+            e.printStackTrace();
+        }
+
+    }
+    private static void function4() {
+        try {
+            String query4 = "DELETE FROM Job WHERE JobID = 4";
+            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            Statement statement = conn.createStatement();
+            statement.executeQuery(query4);
+            System.out.println("Deleted the Job with ID 4");
             
         } catch (SQLException e) {
             System.out.println("⠀⠀⠀⠀⡏⠀⢀⣾⣏⠀⠀⠀⠀⠀⠈⣹⣷⣶⣯⠁⠀⠀⠀⠀⠀⣶⣶⣕⠈⠹⣎⢳⡾⠇⠀⠀⠀\n" + "⠀⠀⠀⠀⠃⠘⢸⣿⣟⢀⣴⣶⣾⣿⣾⣿⣿⣿⣿⣿⣿⣿⣶⣦⡲⣿⣿⣿⡇⠀⢻⣦⣀⠇⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⠀⣼⣿⣼⣷⡹⠟⠛⠻⣿⣿⣿⣿⣿⣿⠟⠉⠻⣿⣷⡽⣿⣿⣿⠀⠀⠉⠛⠃⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⡇⡴⠶⣦⠘⣿⣿⣷⡿⠇⣶⠟⣶⡈⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢀⢿⣿⣿⣿⣿⡆⠳⣤⡿⠀⣯⠿⢿⡷⠀⠙⠦⠾⠁⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢨⣼⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣾⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⡿⣵⣿⡿⠟⢛⣩⣀⡀⠓⠀⠀⠀⢠⣤⠀⠴⠄⢀⣬⣛⠿⣿⣿⣿⣿⠧⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⣿⣿⡿⣡⣶⣿⣿⣿⣿⣷⣤⣀⠀⢀⣀⣀⣀⣾⣿⣿⣷⣷⡌⢻⣿⣏⢧⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⣿⡿⣰⣏⣹⣋⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣻⣿⡙⣟⣹⡜⣿⣏⣯⠆⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⣿⢥⣿⡿⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⣿⣿⣹⣿⡎⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⢿⡸⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⠿⠁⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⠃⢿⣿⣿⣯⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⡟⠠⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢠⡌⠻⠿⢺⣿⣯⣛⢿⣿⡿⣿⣯⡿⣿⣿⣟⣿⣿⣟⣟⡰⣰⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⡀⠈⠂⠀⠀⠀⠉⠉⠙⠛⠛⠙⠛⠛⠉⠉⠈⠉⠉⠉⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⠂⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⡼⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠀⠀⠀⢸⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⢣⢇⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀\n" +"⠀⠀⠀⠀⠀⢸⠅⠀⠀⣸⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢰⡷⠸⢹⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀\n" + "⠀⠀⠀⠀⠀⢸⠂⠀⠀⣿⢸⡄⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣸⠃⡁⢸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀!");
