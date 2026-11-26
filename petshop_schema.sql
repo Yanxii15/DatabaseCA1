@@ -496,6 +496,7 @@ DELIMITER ;
 
 
 -- THESE WILL EXPLODE IF RAN WITIN THE SAME FILE THAT THE PROCEDURES ARE CREATED... exception RestockItem.
+-- They are within the petshop_Stored_Procedures file and will work when run after the creation of the table
 -- CALL RestockItem(2, 6, 25);
 -- CALL GetPetHistory(12);
 -- Call GetLocationSuppliers(1);
